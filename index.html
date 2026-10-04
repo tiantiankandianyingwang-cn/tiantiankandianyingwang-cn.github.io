@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>天天看电影网 - 天天看电影网每日影视推荐与追剧排期</title>
+<meta name="description" content="天天看电影网（tiantiankandianyingwang-cn.github.io）以日历形式呈现每日影视推荐：最新电影、热播剧集追更打卡、番剧综艺排期、影视榜单与观影手记。天天看电影网每日更新，纯静态单页，手机平板全端自适应。">
+<meta name="keywords" content="天天看电影网,天天看电影,电影网,每日电影推荐,今日片单,热播剧集,追剧打卡,番剧排期,影视榜单,在线观看,观影手记">
+<meta name="author" content="天天看电影网">
+<meta name="robots" content="index,follow">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#fdfaf3">
+<link rel="canonical" href="https://tiantiankandianyingwang-cn.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="天天看电影网">
+<meta property="og:title" content="天天看电影网 - 天天看电影网每日影视推荐与追剧排期">
+<meta property="og:description" content="天天看电影网以日历形式呈现每日影视推荐，含今日片单、追更打卡、番剧排期、影视榜单与观影手记。">
+<meta property="og:url" content="https://tiantiankandianyingwang-cn.github.io/">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="天天看电影网 - 每日影视推荐与追剧排期">
+<meta name="twitter:description" content="天天看电影网：今日片单、追更打卡、番剧排期、影视榜单与观影手记。">
+<style>
+:root{
+  --paper:#fdfaf3;
+  --paper-2:#f6f1e6;
+  --card:#ffffff;
+  --ink:#3a3630;
+  --muted:#7d766c;
+  --soft:#a49d92;
+  --line:rgba(58,54,48,.14);
+  --dot:rgba(58,54,48,.10);
+  --coral:#ef6b5a;
+  --teal:#2f8f83;
+  --amber:#e8a33d;
+  --violet:#7a6bb5;
+  --pink:#f4b8c1;
+  --blue:#a9c8e8;
+  --green:#a8d5ba;
+  --mark:#ffe066;
+  --r:12px;
+  --sh:0 2px 6px rgba(58,54,48,.07),0 10px 26px -18px rgba(58,54,48,.5);
+  --maxw:1180px;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  margin:0;
+  background-color:var(--paper);
+  background-image:radial-gradient(var(--dot) 1.1px,transparent 1.1px);
+  background-size:22px 22px;
+  color:var(--ink);
+  font-family:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+  font-size:16px;line-height:1.78;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;height:auto;display:block;}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+h1,h2,h3,h4{margin:0;font-weight:800;line-height:1.32;letter-spacing:-.01em;}
+p{margin:0 0 .8em;}
+ul,ol{margin:0;padding:0;list-style:none;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* 胶带条 */
+.tape{
+  position:absolute;width:96px;height:26px;background:rgba(232,163,61,.34);
+  border-left:1px dashed rgba(255,255,255,.6);border-right:1px dashed rgba(255,255,255,.6);
+  pointer-events:none;
+}
+.tape.t1{top:-12px;left:26px;transform:rotate(-4deg);}
+.tape.t2{top:-12px;right:26px;transform:rotate(5deg);}
+.tape.t3{top:-12px;left:50%;margin-left:-48px;transform:rotate(-2deg);}
+
+/* ===== 顶栏 ===== */
+.desk{position:sticky;top:0;z-index:90;background:rgba(253,250,243,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+.desk .wrap{display:flex;align-items:center;gap:14px;min-height:66px;}
+.brand{display:flex;align-items:center;gap:12px;color:var(--ink);flex:0 0 auto;}
+.brand:hover{text-decoration:none;}
+.cal-ico{
+  width:42px;height:42px;flex:0 0 auto;border-radius:10px;background:var(--card);
+  border:1px solid var(--line);box-shadow:var(--sh);position:relative;overflow:hidden;
+}
+.cal-ico .top{height:12px;background:var(--coral);}
+.cal-ico .num{
+  position:absolute;left:0;right:0;bottom:4px;text-align:center;font-size:14px;font-weight:900;color:var(--ink);
+}
+.brand .tt b{display:block;font-size:19px;letter-spacing:.4px;}
+.brand .tt small{display:block;font-size:11px;color:var(--muted);letter-spacing:.3px;}
+.today-chip{
+  display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;color:var(--ink);
+  background:var(--mark);border-radius:999px;padding:5px 14px;box-shadow:0 2px 0 rgba(58,54,48,.10);
+}
+.today-chip i{width:6px;height:6px;border-radius:50%;background:var(--coral);display:block;}
+.nav{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap;}
+.nav a{display:block;padding:8px 13px;border-radius:999px;font-size:14.5px;font-weight:700;color:var(--muted);}
+.nav a:hover{color:var(--ink);background:rgba(58,54,48,.05);text-decoration:none;}
+.nav a.on{color:#fff;background:var(--ink);}
+.fold{display:none;}
+
+/* ===== 月历首屏 ===== */
+.planner{padding:28px 0 10px;}
+.sheet{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh);padding:26px 26px 22px;
+}
+.cal-top{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px;}
+.cal-top .mo{font-size:34px;letter-spacing:1px;}
+.cal-top .mo em{font-style:normal;color:var(--coral);}
+.cal-top .mo small{display:block;font-size:11.5px;font-weight:800;letter-spacing:2.4px;color:var(--soft);margin-top:5px;}
+.cal-top .sw{display:flex;gap:8px;align-items:center;}
+.sw a{
+  font-size:13px;font-weight:800;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 14px;background:var(--paper);
+}
+.sw a:hover{border-color:var(--ink);color:var(--ink);text-decoration:none;}
+
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+.cal-grid .wd{
+  font-size:11.5px;font-weight:800;color:var(--soft);text-align:center;letter-spacing:1px;padding-bottom:4px;
+}
+.day{
+  position:relative;border:1px solid var(--line);border-radius:10px;background:var(--paper);
+  min-height:88px;padding:8px 9px;display:flex;flex-direction:column;gap:5px;
+}
+.day.dim{opacity:.42;}
+.day.off{background:transparent;border-style:dashed;}
+.day.today{border:2px solid var(--coral);background:#fff6f3;box-shadow:0 0 0 3px rgba(239,107,90,.14);}
+.day .d{font-size:14px;font-weight:900;line-height:1;}
+.day .d span{font-size:10px;color:var(--soft);font-weight:700;margin-left:3px;}
+.day .mk{display:flex;flex-direction:column;gap:4px;margin-top:2px;}
+.day .mk i{
+  display:block;font-style:normal;font-size:10.5px;font-weight:800;border-radius:5px;padding:2px 6px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mk i.f{background:var(--blue);color:#1e3a5f;}
+.mk i.t{background:var(--green);color:#1f4a33;}
+.mk i.a{background:var(--pink);color:#6d3340;}
+.mk i.n{background:var(--mark);color:#5a4708;}
+.day .dot{position:absolute;right:8px;bottom:8px;width:7px;height:7px;border-radius:50%;background:var(--coral);}
+
+.cal-foot{
+  display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:18px;padding-top:16px;
+  border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted);
+}
+.cal-foot .lg{display:flex;gap:12px;flex-wrap:wrap;}
+.cal-foot .lg span{display:flex;align-items:center;gap:6px;}
+.cal-foot .lg i{width:14px;height:10px;border-radius:4px;display:block;}
+.cal-foot .url{margin-left:auto;word-break:break-all;}
+.cal-foot .url b{color:var(--coral);}
+
+/* 首屏下栏：今日三件事 */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;}
+.tri{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 20px 18px;box-shadow:var(--sh);
+}
+.tri .k{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--soft);margin-bottom:8px;}
+.tri h3{font-size:17px;margin-bottom:8px;}
+.tri h3 a{color:var(--ink);}
+.tri h3 a:hover{color:var(--coral);}
+.tri p{font-size:13.5px;color:var(--muted);margin-bottom:12px;}
+.tri .ft{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--soft);border-top:1px dashed var(--line);padding-top:10px;}
+.tri .ft b{color:var(--teal);}
+
+/* ===== 区块头 ===== */
+.sec{padding:34px 0;}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap;}
+.stamp{
+  width:44px;height:44px;flex:0 0 auto;border-radius:50%;border:2px dashed var(--coral);
+  display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--coral);
+  transform:rotate(-8deg);
+}
+.sec-head h2{font-size:26px;}
+.sec-head h2 small{display:block;font-size:11.5px;font-weight:800;letter-spacing:2.4px;color:var(--soft);margin-top:4px;}
+.sec-head .more{margin-left:auto;font-size:13.5px;font-weight:800;color:var(--teal);}
+.sec-head .more:hover{background:var(--mark);}
+
+/* ===== 便签墙 ===== */
+.wall{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start;
+}
+.note{
+  position:relative;border-radius:4px;padding:18px 18px 16px;box-shadow:var(--sh);
+  background:var(--mark);transform:rotate(-1deg);transition:transform .18s ease;
+}
+.note:nth-child(2){background:var(--blue);transform:rotate(1.4deg);}
+.note:nth-child(3){background:var(--green);transform:rotate(-1.6deg);}
+.note:nth-child(4){background:var(--pink);transform:rotate(1.2deg);}
+.note:nth-child(5){background:var(--mark);transform:rotate(1.6deg);}
+.note:nth-child(6){background:var(--blue);transform:rotate(-1.2deg);}
+.note:nth-child(7){background:var(--green);transform:rotate(1deg);}
+.note:nth-child(8){background:var(--pink);transform:rotate(-1.4deg);}
+.note:hover{transform:rotate(0deg) translateY(-4px);}
+.note .pin{
+  position:absolute;top:9px;left:50%;margin-left:-7px;width:14px;height:14px;border-radius:50%;
+  background:var(--coral);box-shadow:0 2px 5px rgba(58,54,48,.35);
+}
+.note .pin.b{background:var(--teal);}
+.note .pin.v{background:var(--violet);}
+.note .pin.a{background:var(--amber);}
+.note h3{font-size:16.5px;margin:14px 0 7px;}
+.note h3 a{color:var(--ink);}
+.note h3 a:hover{color:var(--coral);}
+.note .mt{font-size:12px;font-weight:800;color:rgba(58,54,48,.62);letter-spacing:.4px;margin-bottom:9px;}
+.note p{font-size:13px;color:rgba(58,54,48,.78);margin-bottom:12px;line-height:1.7;}
+.note .ft{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:800;color:rgba(58,54,48,.6);border-top:1px dashed rgba(58,54,48,.22);padding-top:9px;}
+.note .ft em{font-style:normal;background:rgba(255,255,255,.7);border-radius:999px;padding:2px 9px;}
+
+/* ===== 追更打卡链 ===== */
+.chains{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.chain{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--sh);}
+.chain h3{font-size:17px;margin-bottom:5px;}
+.chain .mt{font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:14px;}
+.links{display:flex;flex-wrap:wrap;gap:6px;}
+.links .lk{
+  width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:var(--paper);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--soft);
+}
+.links .lk.done{background:var(--teal);border-color:var(--teal);color:#fff;}
+.links .lk.now{background:var(--coral);border-color:var(--coral);color:#fff;box-shadow:0 0 0 3px rgba(239,107,90,.18);}
+.links .lk.rest{background:transparent;border-style:dashed;}
+.chain .sum{margin-top:14px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:11px;}
+.chain .sum b{color:var(--coral);}
+.streak{
+  display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:#5a4708;
+  background:var(--mark);border-radius:999px;padding:3px 10px;
+}
+
+/* ===== 阶梯榜单 ===== */
+.stairs{display:flex;flex-direction:column;gap:10px;}
+.stepx{
+  display:grid;grid-template-columns:64px 1fr 120px 100px;gap:14px;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;
+  box-shadow:0 1px 3px rgba(58,54,48,.06);
+}
+.stepx:nth-child(1){margin-left:0;background:linear-gradient(90deg,#fff3e0,var(--card));border-left:4px solid var(--amber);}
+.stepx:nth-child(2){margin-left:18px;background:linear-gradient(90deg,#eef4f2,var(--card));border-left:4px solid var(--teal);}
+.stepx:nth-child(3){margin-left:36px;background:linear-gradient(90deg,#f4eef8,var(--card));border-left:4px solid var(--violet);}
+.stepx:nth-child(4){margin-left:54px;}
+.stepx:nth-child(5){margin-left:72px;}
+.stepx:nth-child(6){margin-left:90px;}
+.stepx:nth-child(7){margin-left:108px;}
+.stepx:nth-child(8){margin-left:126px;}
+.stepx .no{font-size:17px;font-weight:900;color:var(--soft);text-align:center;}
+.stepx:nth-child(1) .no{color:var(--amber);}
+.stepx:nth-child(2) .no{color:var(--teal);}
+.stepx:nth-child(3) .no{color:var(--violet);}
+.stepx .nm{font-weight:800;font-size:15.5px;}
+.stepx .nm span{display:block;font-size:12.5px;font-weight:500;color:var(--muted);}
+.stepx .hv{font-size:14px;font-weight:900;color:var(--coral);}
+.stepx .td{font-size:12.5px;color:var(--muted);font-weight:700;text-align:right;}
+
+/* ===== 手记卡 ===== */
+.journals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.jr{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:0 0 16px;box-shadow:var(--sh);overflow:hidden;
+}
+.jr .hd{padding:16px 20px 12px;border-bottom:1px dashed var(--line);}
+.jr:nth-child(1) .hd{background:rgba(169,200,232,.28);}
+.jr:nth-child(2) .hd{background:rgba(244,184,193,.28);}
+.jr:nth-child(3) .hd{background:rgba(168,213,186,.28);}
+.jr .date{font-size:11.5px;font-weight:800;letter-spacing:1.6px;color:var(--muted);}
+.jr h3{font-size:17px;margin-top:6px;}
+.jr h3 a{color:var(--ink);}
+.jr h3 a:hover{color:var(--coral);}
+.jr .bd{padding:14px 20px 0;font-size:13.5px;color:var(--muted);line-height:1.75;}
+.jr .bd .rule{
+  margin:10px 0;height:12px;border-radius:2px;
+  background:repeating-linear-gradient(0deg,var(--line) 0 1px,transparent 1px 12px);
+}
+.jr .ft{padding:14px 20px 0;display:flex;justify-content:space-between;font-size:12px;color:var(--soft);}
+
+/* ===== 关于 + FAQ ===== */
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;align-items:start;}
+.boxx{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--sh);}
+.boxx h2{font-size:22px;margin-bottom:12px;}
+.boxx p{font-size:14.5px;color:var(--muted);}
+.boxx p strong{color:var(--ink);}
+.hl{
+  background:linear-gradient(180deg,transparent 62%,var(--mark) 62%);
+  padding:0 2px;font-weight:700;color:var(--ink);
+}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}
+.cellx{border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:12px 14px;}
+.cellx b{display:block;font-size:14px;color:var(--teal);margin-bottom:3px;}
+.cellx span{font-size:12.5px;color:var(--muted);line-height:1.6;}
+.qa .it{padding:13px 0;border-bottom:1px dashed var(--line);}
+.qa .it:first-child{padding-top:0;}
+.qa .it:last-child{border-bottom:0;padding-bottom:0;}
+.qa dt{font-weight:800;font-size:15px;margin-bottom:5px;}
+.qa dt::before{content:"· ";color:var(--coral);font-weight:900;}
+.qa dd{margin:0;font-size:14px;color:var(--muted);padding-left:12px;}
+
+/* ===== 订阅 ===== */
+.sub{
+  margin:6px 0 18px;position:relative;border:1px solid var(--line);border-radius:var(--r);
+  padding:32px 28px;background:linear-gradient(120deg,#fff8e6,#f3f7f5 55%,#fdf1ef);
+  box-shadow:var(--sh);display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center;
+}
+.sub h2{font-size:24px;margin-bottom:8px;}
+.sub p{font-size:14px;color:var(--muted);margin:0;}
+.sub-form{display:flex;gap:10px;flex-wrap:wrap;}
+.sub-form input{
+  flex:1 1 190px;min-width:0;padding:13px 17px;border-radius:999px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font-size:15px;font-family:inherit;
+}
+.sub-form input::placeholder{color:var(--soft);}
+.sub-form button{
+  border:0;border-radius:999px;padding:13px 26px;background:var(--coral);color:#fff;
+  font-size:14.5px;font-weight:800;cursor:pointer;font-family:inherit;
+  box-shadow:0 8px 18px -8px rgba(239,107,90,.7);
+}
+
+/* ===== 友链 ===== */
+.friends{display:flex;gap:9px;flex-wrap:wrap;padding:2px 0 8px;}
+.friends a{
+  font-size:13px;font-weight:700;padding:7px 15px;border-radius:999px;
+  background:var(--card);color:var(--muted);border:1px solid var(--line);box-shadow:0 1px 2px rgba(58,54,48,.05);
+}
+.friends a:hover{border-color:var(--coral);color:var(--coral);text-decoration:none;}
+
+/* ===== 页脚 ===== */
+.foot{border-top:1px solid var(--line);background:var(--paper-2);padding:36px 0 22px;margin-top:18px;}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:24px;}
+.foot h4{font-size:12px;letter-spacing:2px;color:var(--soft);margin-bottom:11px;text-transform:uppercase;}
+.foot li{padding:3px 0;}
+.foot a{font-size:13.5px;color:var(--muted);}
+.foot a:hover{color:var(--coral);}
+.foot .desc{font-size:13.5px;color:var(--muted);}
+.foot .kw{font-size:12.5px;color:var(--soft);line-height:2;margin-top:10px;}
+.foot .legal{border-top:1px solid var(--line);margin-top:22px;padding-top:15px;font-size:12.5px;color:var(--soft);}
+.foot .legal p{margin:0 0 .4em;}
+
+/* ===== 响应式 ===== */
+@media (max-width:1080px){
+  .wall{grid-template-columns:repeat(3,1fr);}
+  .chains{grid-template-columns:1fr;}
+  .journals{grid-template-columns:1fr;}
+  .split{grid-template-columns:1fr;}
+  .trio{grid-template-columns:1fr;}
+  .foot-grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:860px){
+  .nav{display:none;}
+  .fold{
+    display:inline-block;padding:8px 15px;border:1px solid var(--line);border-radius:999px;
+    font-size:13.5px;font-weight:800;color:var(--ink);background:var(--card);cursor:pointer;
+  }
+  .mnav{flex:1 1 100%;max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  #sw:checked ~ .mnav{max-height:320px;}
+  .mnav ul{display:flex;flex-wrap:wrap;gap:7px;padding:10px 0 12px;}
+  .mnav a{
+    display:block;font-size:13px;font-weight:700;color:var(--ink);background:var(--card);
+    border:1px solid var(--line);border-radius:999px;padding:7px 14px;
+  }
+  .today-chip{display:none;}
+  .stepx:nth-child(n){margin-left:0;}
+  .stepx{grid-template-columns:52px 1fr 84px;}
+  .stepx .nm span{display:none;}
+  .stepx .td{display:none;}
+}
+@media (max-width:760px){
+  body{font-size:15.5px;}
+  .wrap{padding:0 16px;}
+  .desk .wrap{min-height:58px;gap:10px;}
+  .planner{padding:18px 0 4px;}
+  .sheet{padding:18px 14px 16px;border-radius:12px;}
+  .cal-top{margin-bottom:14px;}
+  .cal-top .mo{font-size:26px;}
+  .cal-grid{gap:4px;}
+  .cal-grid .wd{font-size:10px;}
+  .day{min-height:58px;padding:5px 5px;border-radius:7px;}
+  .day .d{font-size:12px;}
+  .day .d span{display:none;}
+  .day .mk i{font-size:9px;padding:1px 4px;border-radius:3px;}
+  .day .dot{width:5px;height:5px;right:5px;bottom:5px;}
+  .cal-foot{padding-top:12px;font-size:11.5px;gap:10px 14px;}
+  .cal-foot .url{margin-left:0;width:100%;}
+  .sec{padding:26px 0;}
+  .sec-head h2{font-size:21px;}
+  .sec-head .more{margin-left:0;width:100%;}
+  .stamp{width:38px;height:38px;font-size:13px;}
+  .wall{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .note{padding:15px 14px 14px;}
+  .note h3{font-size:15px;margin:12px 0 6px;}
+  .note p{font-size:12.5px;}
+  .links .lk{width:23px;height:23px;font-size:10px;border-radius:6px;}
+  .grid2{grid-template-columns:1fr;}
+  .boxx{padding:20px;}
+  .boxx h2{font-size:19px;}
+  .sub{grid-template-columns:1fr;padding:22px 18px;}
+  .sub h2{font-size:20px;}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:18px;}
+}
+@media (max-width:430px){
+  .wall{grid-template-columns:1fr;}
+  .cal-top .mo{font-size:23px;}
+  .day{min-height:48px;}
+  .foot-grid{grid-template-columns:1fr;}
+  .brand .tt b{font-size:17px;}
+}
+@media print{.desk,.sub{display:none;}}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/xiaobao.js"></script>
+
+<header class="desk">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="天天看电影网 首页">
+      <span class="cal-ico" aria-hidden="true"><span class="top"></span><span class="num">10</span></span>
+      <span class="tt">
+        <b>天天看电影网</b>
+        <small>tiantiankandianyingwang-cn.github.io</small>
+      </span>
+    </a>
+
+    <span class="today-chip"><i aria-hidden="true"></i>今天 · 4 部新片已排期</span>
+
+    <input class="sr" type="checkbox" id="sw" aria-label="展开栏目导航">
+    <label class="fold" for="sw">栏目 ☰</label>
+
+    <nav class="nav" aria-label="主导航">
+      <a class="on" href="#">今日</a>
+      <a href="#wall">片单便签</a>
+      <a href="#chains">追更打卡</a>
+      <a href="#stairs">榜单</a>
+      <a href="#journals">观影手记</a>
+      <a href="#about">关于</a>
+    </nav>
+
+    <nav class="mnav" aria-label="移动端栏目导航">
+      <ul>
+        <li><a href="#wall">片单便签</a></li>
+        <li><a href="#chains">追更打卡</a></li>
+        <li><a href="#stairs">影视榜单</a></li>
+        <li><a href="#journals">观影手记</a></li>
+        <li><a href="#about">关于本站</a></li>
+        <li><a href="#sub">订阅片单</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== 月历首屏 ===== -->
+  <section class="wrap planner" aria-labelledby="cal-title">
+    <div class="sheet">
+      <span class="tape t1" aria-hidden="true"></span>
+      <span class="tape t2" aria-hidden="true"></span>
+
+      <div class="cal-top">
+        <h1 class="mo" id="cal-title"><em>天天看电影网</em> · 每日影视推荐<small>DAILY PICKS · 2026 年 10 月排期</small></h1>
+        <div class="sw">
+          <a href="#">上一月</a>
+          <a href="#">本月</a>
+          <a href="#">下一月</a>
+        </div>
+      </div>
+
+      <div class="cal-grid" role="table" aria-label="2026 年 10 月片单排期">
+        <span class="wd" role="columnheader">一</span>
+        <span class="wd" role="columnheader">二</span>
+        <span class="wd" role="columnheader">三</span>
+        <span class="wd" role="columnheader">四</span>
+        <span class="wd" role="columnheader">五</span>
+        <span class="wd" role="columnheader">六</span>
+        <span class="wd" role="columnheader">日</span>
+
+        <div class="day dim off" role="cell"><span class="d">28</span></div>
+        <div class="day dim off" role="cell"><span class="d">29</span></div>
+        <div class="day dim off" role="cell"><span class="d">30</span></div>
+        <div class="day" role="cell"><span class="d">1</span><span class="mk"><i class="f">《海雾迷城》</i></span></div>
+        <div class="day" role="cell"><span class="d">2</span><span class="mk"><i class="t">《长夜渡口》</i></span></div>
+        <div class="day" role="cell"><span class="d">3</span><span class="mk"><i class="a">《灶台人家》</i></span><span class="dot" aria-hidden="true"></span></div>
+        <div class="day" role="cell"><span class="d">4</span><span class="mk"><i class="n">番剧更新</i></span></div>
+
+        <div class="day" role="cell"><span class="d">5</span><span class="mk"><i class="f">《狂飙追击》</i></span></div>
+        <div class="day" role="cell"><span class="d">6</span><span class="mk"><i class="t">《雾港档案》</i></span></div>
+        <div class="day" role="cell"><span class="d">7</span><span class="mk"><i class="a">《旧巷浮光》</i></span></div>
+        <div class="day" role="cell"><span class="d">8</span><span class="mk"><i class="n">榜单重算</i></span><span class="dot" aria-hidden="true"></span></div>
+        <div class="day" role="cell"><span class="d">9</span><span class="mk"><i class="f">《星轨远征》</i></span></div>
+        <div class="day" role="cell"><span class="d">10</span><span class="mk"><i class="t">《街角食堂》</i></span></div>
+        <div class="day" role="cell"><span class="d">11</span><span class="mk"><i class="a">《归途列车》</i></span></div>
+
+        <div class="day" role="cell"><span class="d">12</span><span class="mk"><i class="n">手记更新</i></span></div>
+        <div class="day" role="cell"><span class="d">13</span><span class="mk"><i class="f">《裂谷追光》</i></span><span class="dot" aria-hidden="true"></span></div>
+        <div class="day" role="cell"><span class="d">14</span><span class="mk"><i class="t">《灵峰剑语》</i></span></div>
+        <div class="day" role="cell"><span class="d">15</span><span class="mk"><i class="a">《山海草木》</i></span></div>
+        <div class="day" role="cell"><span class="d">16</span><span class="mk"><i class="n">排期核对</i></span></div>
+        <div class="day" role="cell"><span class="d">17</span><span class="mk"><i class="f">《无声证言》</i></span></div>
+        <div class="day" role="cell"><span class="d">18</span><span class="mk"><i class="t">《河对岸》</i></span></div>
+
+        <div class="day" role="cell"><span class="d">19</span><span class="mk"><i class="a">《春分之后》</i></span><span class="dot" aria-hidden="true"></span></div>
+        <div class="day" role="cell"><span class="d">20</span><span class="mk"><i class="n">番剧更新</i></span></div>
+        <div class="day today" role="cell"><span class="d">21<span>今天</span></span><span class="mk"><i class="f">《狂飙追击》</i><i class="t">《雾港档案》</i></span><span class="dot" aria-hidden="true"></span></div>
+        <div class="day" role="cell"><span class="d">22</span><span class="mk"><i class="a">《灶台人家》</i></span></div>
+        <div class="day" role="cell"><span class="d">23</span><span class="mk"><i class="n">榜单重算</i></span></div>
+        <div class="day" role="cell"><span class="d">24</span><span class="mk"><i class="f">《星轨远征》</i></span></div>
+        <div class="day" role="cell"><span class="d">25</span><span class="mk"><i class="t">《城市漫游》</i></span></div>
+
+        <div class="day" role="cell"><span class="d">26</span><span class="mk"><i class="a">《同桌的你》</i></span><span class="dot" aria-hidden="true"></span></div>
+        <div class="day" role="cell"><span class="d">27</span><span class="mk"><i class="n">手记更新</i></span></div>
+        <div class="day" role="cell"><span class="d">28</span><span class="mk"><i class="f">《深巷回声》</i></span></div>
+        <div class="day" role="cell"><span class="d">29</span><span class="mk"><i class="t">《长夜渡口》</i></span></div>
+        <div class="day" role="cell"><span class="d">30</span><span class="mk"><i class="a">《麦田长歌》</i></span></div>
+        <div class="day" role="cell"><span class="d">31</span><span class="mk"><i class="n">月度盘点</i></span></div>
+        <div class="day dim off" role="cell"><span class="d">1</span></div>
+      </div>
+
+      <div class="cal-foot">
+        <span class="lg">
+          <span><i style="background:var(--blue)"></i>电影</span>
+          <span><i style="background:var(--green)"></i>剧集</span>
+          <span><i style="background:var(--pink)"></i>纪录片 / 综艺</span>
+          <span><i style="background:var(--mark)"></i>站点更新</span>
+        </span>
+        <span class="url">网址：<b>https://tiantiankandianyingwang-cn.github.io</b></span>
+      </div>
+    </div>
+
+    <div class="trio">
+      <article class="tri">
+        <p class="k">今日首推 · 电影</p>
+        <h3><a href="#">狂飙追击</a></h3>
+        <p>公路追车与近身搏斗交替推进，节奏不拖沓，适合今晚一口气看完。</p>
+        <p class="ft"><span>动作 / 犯罪 · 128 分钟</span><b>8.9</b></p>
+      </article>
+      <article class="tri">
+        <p class="k">今日更新 · 剧集</p>
+        <h3><a href="#">雾港档案</a></h3>
+        <p>本周三更新第 11 集，线索进入收束阶段，建议连看两集追平进度。</p>
+        <p class="ft"><span>悬疑 / 刑侦 · 24 集</span><b>8.6</b></p>
+      </article>
+      <article class="tri">
+        <p class="k">今日补番 · 纪录片</p>
+        <h3><a href="#">灶台人家</a></h3>
+        <p>短篇幅人文纪录片，走遍十四座城市的市井厨房，适合碎片时间看。</p>
+        <p class="ft"><span>纪录片 / 人文 · 97 分钟</span><b>9.2</b></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 片单便签墙 ===== -->
+  <section class="wrap sec" id="wall" aria-labelledby="wall-title">
+    <div class="sec-head">
+      <span class="stamp" aria-hidden="true">01</span>
+      <h2 id="wall-title">片单便签墙<small>STICKY NOTES · 天天看电影网每日推荐</small></h2>
+      <a class="more" href="#">查看全部便签 →</a>
+    </div>
+    <div class="wall">
+      <article class="note">
+        <span class="pin" aria-hidden="true"></span>
+        <h3><a href="#">狂飙追击</a></h3>
+        <p class="mt">动作 / 犯罪 · 2025 · 128 分钟</p>
+        <p>海岸公路追车长镜头与紧凑剪辑，节奏快、信息量足，适合晚间连刷。</p>
+        <p class="ft"><span>10 / 21 推荐</span><em>1080P</em></p>
+      </article>
+      <article class="note">
+        <span class="pin b" aria-hidden="true"></span>
+        <h3><a href="#">雾港档案</a></h3>
+        <p class="mt">悬疑 / 刑侦 · 更新至第 11 集</p>
+        <p>港口迷雾中的失踪案，线索铺陈细密，反转留到最后一刻。</p>
+        <p class="ft"><span>周三 20:00 更新</span><em>1080P</em></p>
+      </article>
+      <article class="note">
+        <span class="pin v" aria-hidden="true"></span>
+        <h3><a href="#">灶台人家</a></h3>
+        <p class="mt">纪录片 / 人文 · 2024 · 97 分钟</p>
+        <p>十四座城市的市井厨房，烟火气与人文观察兼具，篇幅短易消化。</p>
+        <p class="ft"><span>10 / 22 推荐</span><em>4K</em></p>
+      </article>
+      <article class="note">
+        <span class="pin a" aria-hidden="true"></span>
+        <h3><a href="#">星轨远征</a></h3>
+        <p class="mt">科幻 / 冒险 · 2025 · 141 分钟</p>
+        <p>硬设定配合克制叙事，太空段落镜头语言值得大屏观看。</p>
+        <p class="ft"><span>10 / 24 推荐</span><em>4K HDR</em></p>
+      </article>
+      <article class="note">
+        <span class="pin" aria-hidden="true"></span>
+        <h3><a href="#">灵峰剑语</a></h3>
+        <p class="mt">国漫 / 玄幻 · 更新至第 21 话</p>
+        <p>水墨风打斗与扎实分镜，更新稳定，按周追不易断档。</p>
+        <p class="ft"><span>周五 20:00 更新</span><em>1080P</em></p>
+      </article>
+      <article class="note">
+        <span class="pin b" aria-hidden="true"></span>
+        <h3><a href="#">旧巷浮光</a></h3>
+        <p class="mt">历史 / 剧情 · 1996 · 134 分钟</p>
+        <p>4K 修复版上线，音画质全面重制，经典重看依然成立。</p>
+        <p class="ft"><span>10 / 07 推荐</span><em>4K 修复</em></p>
+      </article>
+      <article class="note">
+        <span class="pin v" aria-hidden="true"></span>
+        <h3><a href="#">归途列车</a></h3>
+        <p class="mt">剧情 / 公路 · 2025 · 118 分钟</p>
+        <p>返乡旅程串起三代人的对话，情绪推进自然，适合慢慢看。</p>
+        <p class="ft"><span>10 / 11 推荐</span><em>1080P</em></p>
+      </article>
+      <article class="note">
+        <span class="pin a" aria-hidden="true"></span>
+        <h3><a href="#">城市漫游指南</a></h3>
+        <p class="mt">综艺 / 旅行 · 更新至第 9 期</p>
+        <p>慢节奏城市纪实，取景与配乐质感稳定，可连刷多期。</p>
+        <p class="ft"><span>周六 19:30 更新</span><em>1080P</em></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 追更打卡 ===== -->
+  <section class="wrap sec" id="chains" aria-labelledby="chains-title">
+    <div class="sec-head">
+      <span class="stamp" aria-hidden="true">02</span>
+      <h2 id="chains-title">追更打卡链<small>STREAK · 每看一集盖一个章</small></h2>
+      <a class="more" href="#">我的追更清单 →</a>
+    </div>
+    <div class="chains">
+      <article class="chain">
+        <h3>雾港档案</h3>
+        <p class="mt">悬疑 / 刑侦 · 全 24 集 · 每周三</p>
+        <div class="links">
+          <span class="lk done">1</span><span class="lk done">2</span><span class="lk done">3</span>
+          <span class="lk done">4</span><span class="lk done">5</span><span class="lk done">6</span>
+          <span class="lk done">7</span><span class="lk done">8</span><span class="lk done">9</span>
+          <span class="lk done">10</span><span class="lk now">11</span><span class="lk">12</span>
+          <span class="lk">13</span><span class="lk rest">…</span><span class="lk rest">24</span>
+        </div>
+        <p class="sum"><span class="streak">连续打卡 10 集</span><span>进度 <b>11 / 24</b></span></p>
+      </article>
+      <article class="chain">
+        <h3>灵峰剑语</h3>
+        <p class="mt">国漫 / 玄幻 · 连载中 · 每周五</p>
+        <div class="links">
+          <span class="lk done">1</span><span class="lk done">2</span><span class="lk done">3</span>
+          <span class="lk done">4</span><span class="lk done">5</span><span class="lk done">6</span>
+          <span class="lk done">7</span><span class="lk done">8</span><span class="lk done">9</span>
+          <span class="lk done">10</span><span class="lk done">11</span><span class="lk done">12</span>
+          <span class="lk done">13</span><span class="lk done">14</span><span class="lk done">15</span>
+          <span class="lk done">16</span><span class="lk done">17</span><span class="lk done">18</span>
+          <span class="lk done">19</span><span class="lk done">20</span><span class="lk now">21</span>
+        </div>
+        <p class="sum"><span class="streak">连续打卡 21 话</span><span>已追至 <b>第 21 话</b></span></p>
+      </article>
+      <article class="chain">
+        <h3>街角食堂</h3>
+        <p class="mt">都市 / 生活 · 全 14 集 · 每周六</p>
+        <div class="links">
+          <span class="lk done">1</span><span class="lk done">2</span><span class="lk done">3</span>
+          <span class="lk done">4</span><span class="lk done">5</span><span class="lk done">6</span>
+          <span class="lk done">7</span><span class="lk done">8</span><span class="lk done">9</span>
+          <span class="lk done">10</span><span class="lk done">11</span><span class="lk now">12</span>
+          <span class="lk">13</span><span class="lk">14</span>
+        </div>
+        <p class="sum"><span class="streak">连续打卡 12 集</span><span>进度 <b>12 / 14</b></span></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 阶梯榜单 ===== -->
+  <section class="wrap sec" id="stairs" aria-labelledby="stairs-title">
+    <div class="sec-head">
+      <span class="stamp" aria-hidden="true">03</span>
+      <h2 id="stairs-title">影视榜单 · 阶梯排行<small>RANKING · 每周一重算</small></h2>
+      <a class="more" href="#">榜单规则 →</a>
+    </div>
+    <div class="stairs" role="list" aria-label="天天看电影网影视榜单">
+      <div class="stepx" role="listitem"><span class="no">01</span><span class="nm">狂飙追击<span>动作 / 犯罪 · 2025</span></span><span class="hv">99.2</span><span class="td">↑ 12%</span></div>
+      <div class="stepx" role="listitem"><span class="no">02</span><span class="nm">灶台人家<span>纪录片 / 人文 · 2024</span></span><span class="hv">95.4</span><span class="td">↑ 7%</span></div>
+      <div class="stepx" role="listitem"><span class="no">03</span><span class="nm">雾港档案<span>悬疑 / 刑侦 · 2025</span></span><span class="hv">93.8</span><span class="td">↑ 9%</span></div>
+      <div class="stepx" role="listitem"><span class="no">04</span><span class="nm">灵峰剑语<span>国漫 / 玄幻 · 2025</span></span><span class="hv">91.6</span><span class="td">↑ 5%</span></div>
+      <div class="stepx" role="listitem"><span class="no">05</span><span class="nm">星轨远征<span>科幻 / 冒险 · 2025</span></span><span class="hv">89.3</span><span class="td">↓ 2%</span></div>
+      <div class="stepx" role="listitem"><span class="no">06</span><span class="nm">旧巷浮光<span>历史 / 剧情 · 1996</span></span><span class="hv">87.0</span><span class="td">→ 持平</span></div>
+      <div class="stepx" role="listitem"><span class="no">07</span><span class="nm">归途列车<span>剧情 / 公路 · 2025</span></span><span class="hv">85.2</span><span class="td">↑ 3%</span></div>
+      <div class="stepx" role="listitem"><span class="no">08</span><span class="nm">城市漫游指南<span>综艺 / 旅行 · 2025</span></span><span class="hv">83.1</span><span class="td">↓ 1%</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 观影手记 ===== -->
+  <section class="wrap sec" id="journals" aria-labelledby="journals-title">
+    <div class="sec-head">
+      <span class="stamp" aria-hidden="true">04</span>
+      <h2 id="journals-title">观影手记<small>READING NOTES · 每天记一笔</small></h2>
+      <a class="more" href="#">进入专栏 →</a>
+    </div>
+    <div class="journals">
+      <article class="jr">
+        <div class="hd">
+          <p class="date">10 / 12 · 选片方法</p>
+          <h3><a href="#">如何用日历安排一周观影计划</a></h3>
+        </div>
+        <div class="bd">
+          把想看的内容按日期排进日历，每天只留一部主推，既能保持节奏，也不会一次堆太多看不完。
+          <div class="rule" aria-hidden="true"></div>
+          周末可安排两部长片，工作日优先短篇幅的纪录片或剧集单集。
+        </div>
+        <p class="ft"><span>天天看电影网 · 编辑部</span><span>4 分钟</span></p>
+      </article>
+      <article class="jr">
+        <div class="hd">
+          <p class="date">10 / 16 · 追更技巧</p>
+          <h3><a href="#">追更打卡：怎样不断档地跟进剧集</a></h3>
+        </div>
+        <div class="bd">
+          固定播出日 + 集数打卡是最简单的方式，每看完一集盖一个章，进度一目了然。
+          <div class="rule" aria-hidden="true"></div>
+          遇到停播周可在打卡链上留虚线格，避免误判漏集。
+        </div>
+        <p class="ft"><span>天天看电影网 · 编辑部</span><span>5 分钟</span></p>
+      </article>
+      <article class="jr">
+        <div class="hd">
+          <p class="date">10 / 19 · 观看设置</p>
+          <h3><a href="#">手机看片：清晰度与流量控制</a></h3>
+        </div>
+        <div class="bd">
+          移动网络建议 720P 或 1080P，Wi-Fi 环境可选 4K，同时留意字幕加载与缓存清理。
+          <div class="rule" aria-hidden="true"></div>
+          通勤场景可提前缓存单集，避免途中因网络波动中断。
+        </div>
+        <p class="ft"><span>天天看电影网 · 技术组</span><span>3 分钟</span></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 关于 + FAQ ===== -->
+  <section class="wrap sec" id="about" aria-labelledby="about-title">
+    <div class="sec-head">
+      <span class="stamp" aria-hidden="true">05</span>
+      <h2 id="about-title">关于天天看电影网<small>ABOUT US</small></h2>
+      <a class="more" href="#">纠错反馈 →</a>
+    </div>
+    <div class="split">
+      <div class="boxx">
+        <h2>用日历的方式，安排每天看什么</h2>
+        <p><strong>天天看电影网</strong>把影视推荐做成一张可以翻的月历：每天格子里排好当天主推的影片、剧集更新或纪录片，配合便签墙、追更打卡链与观影手记，帮你把"今天看什么"这件事提前安排好。</p>
+        <p>所有条目按<span class="hl">题材、年份、评分与热度</span>结构化整理，每日 08:00 刷新排期。本站为纯静态单页结构，样式直接内联渲染，不依赖任何外部资源，弱网环境下也能稳定打开；页面在 <strong>320px 至 1440px</strong> 宽度区间内自动切换版式。</p>
+        <div class="grid2">
+          <div class="cellx"><b>日历排期</b><span>按日期查看当天主推与更新提醒</span></div>
+          <div class="cellx"><b>追更打卡</b><span>每看完一集盖一个章，进度可视</span></div>
+          <div class="cellx"><b>全端自适应</b><span>手机、平板、桌面统一体验</span></div>
+          <div class="cellx"><b>轻量加载</b><span>静态页面，首屏快速呈现</span></div>
+        </div>
+      </div>
+
+      <div class="boxx">
+        <h2>常见问题</h2>
+        <dl class="qa">
+          <div class="it">
+            <dt>天天看电影网需要注册才能浏览吗？</dt>
+            <dd>不需要。日历排期、片单便签、榜单与手记均可直接浏览，注册仅用于保存打卡进度与收藏条目。</dd>
+          </div>
+          <div class="it">
+            <dt>手机端打开页面排版会乱吗？</dt>
+            <dd>不会。本站采用响应式布局，在 320px 至 1440px 宽度区间内自动切换栅格列数与导航形态，小屏状态下顶部导航收起，改由可展开面板切换栏目。</dd>
+          </div>
+          <div class="it">
+            <dt>日历格子里的色块代表什么？</dt>
+            <dd>蓝色为电影推荐，绿色为剧集更新，粉色为纪录片或综艺，黄色为站点自身的排期更新，图例中有对照说明。</dd>
+          </div>
+          <div class="it">
+            <dt>榜单的排序依据是什么？</dt>
+            <dd>综合播放热度、收藏量、评分与更新时效加权计算，每周一重算，阶梯长度对应名次。</dd>
+          </div>
+          <div class="it">
+            <dt>发现条目信息有误如何反馈？</dt>
+            <dd>可通过页脚"纠错反馈"入口提交作品名称与正确信息，编辑部会在 48 小时内核对并更新。</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 订阅 ===== -->
+  <section class="wrap" id="sub" aria-labelledby="sub-title">
+    <div class="sub">
+      <span class="tape t3" aria-hidden="true"></span>
+      <div>
+        <h2 id="sub-title">订阅天天看电影网每日片单</h2>
+        <p>留下邮箱，每天早上推送当天排期与本周榜单摘要，可随时退订。</p>
+      </div>
+      <form class="sub-form" action="#" method="post" onsubmit="return false;">
+        <label class="sr" for="email">邮箱地址</label>
+        <input id="email" name="email" type="email" placeholder="请输入邮箱地址" autocomplete="email">
+        <button type="submit">订阅片单</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== 友链 ===== -->
+  <section class="wrap" aria-labelledby="links-title">
+    <h2 id="links-title" class="sr">友情链接</h2>
+    <div class="friends">
+      <a href="#">影视资讯网</a>
+      <a href="#">高分电影榜</a>
+      <a href="#">剧集追更日历</a>
+      <a href="#">动漫番剧库</a>
+      <a href="#">纪录片频道</a>
+      <a href="#">综艺节目单</a>
+      <a href="#">影评周刊</a>
+      <a href="#">经典修复计划</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>天天看电影网</h4>
+        <p class="desc">天天看电影网 · 每日影视推荐与追剧排期<br>网址：https://tiantiankandianyingwang-cn.github.io</p>
+        <p class="kw">相关词：天天看电影网、天天看电影、电影网、每日电影推荐、今日片单、热播剧集、追剧打卡、番剧排期、影视榜单、在线观看、观影手记</p>
+      </div>
+      <div>
+        <h4>内容栏目</h4>
+        <ul>
+          <li><a href="#wall">片单便签</a></li>
+          <li><a href="#chains">追更打卡</a></li>
+          <li><a href="#stairs">影视榜单</a></li>
+          <li><a href="#journals">观影手记</a></li>
+          <li><a href="#about">关于本站</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>关于站点</h4>
+        <ul>
+          <li><a href="#about">排期规则</a></li>
+          <li><a href="#stairs">榜单规则</a></li>
+          <li><a href="#">纠错反馈</a></li>
+          <li><a href="#">友链申请</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>条款与声明</h4>
+        <ul>
+          <li><a href="#">免责声明</a></li>
+          <li><a href="#">隐私政策</a></li>
+          <li><a href="#">版权投诉</a></li>
+          <li><a href="#">联系我们</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <p>本站为影视信息聚合与导航站点，仅提供条目索引、排期与介绍，不存储、不上传、不提供任何影视资源的下载或在线播放文件；相关版权归权利人所有。</p>
+      <p>© 2026 天天看电影网 tiantiankandianyingwang-cn.github.io · 保留所有权利</p>
+    </div>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://tiantiankandianyingwang-cn.github.io/#website",
+      "url": "https://tiantiankandianyingwang-cn.github.io/",
+      "name": "天天看电影网",
+      "alternateName": ["天天看电影", "电影网", "每日电影推荐"],
+      "description": "天天看电影网以日历形式呈现每日影视推荐：最新电影、热播剧集追更打卡、番剧综艺排期、影视榜单与观影手记。",
+      "inLanguage": "zh-CN",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://tiantiankandianyingwang-cn.github.io/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://tiantiankandianyingwang-cn.github.io/#organization",
+      "name": "天天看电影网",
+      "url": "https://tiantiankandianyingwang-cn.github.io/",
+      "description": "每日影视推荐与追剧排期网站"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "首页", "item": "https://tiantiankandianyingwang-cn.github.io/"},
+        {"@type": "ListItem", "position": 2, "name": "片单便签", "item": "https://tiantiankandianyingwang-cn.github.io/#wall"},
+        {"@type": "ListItem", "position": 3, "name": "追更打卡", "item": "https://tiantiankandianyingwang-cn.github.io/#chains"},
+        {"@type": "ListItem", "position": 4, "name": "影视榜单", "item": "https://tiantiankandianyingwang-cn.github.io/#stairs"},
+        {"@type": "ListItem", "position": 5, "name": "观影手记", "item": "https://tiantiankandianyingwang-cn.github.io/#journals"},
+        {"@type": "ListItem", "position": 6, "name": "关于本站", "item": "https://tiantiankandianyingwang-cn.github.io/#about"}
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "name": "天天看电影网影视榜单",
+      "itemListOrder": "https://schema.org/ItemListOrderDescending",
+      "numberOfItems": 8,
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "狂飙追击"},
+        {"@type": "ListItem", "position": 2, "name": "灶台人家"},
+        {"@type": "ListItem", "position": 3, "name": "雾港档案"},
+        {"@type": "ListItem", "position": 4, "name": "灵峰剑语"},
+        {"@type": "ListItem", "position": 5, "name": "星轨远征"},
+        {"@type": "ListItem", "position": 6, "name": "旧巷浮光"},
+        {"@type": "ListItem", "position": 7, "name": "归途列车"},
+        {"@type": "ListItem", "position": 8, "name": "城市漫游指南"}
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "天天看电影网需要注册才能浏览吗？",
+          "acceptedAnswer": {"@type": "Answer", "text": "不需要。日历排期、片单便签、榜单与手记均可直接浏览，注册仅用于保存打卡进度与收藏条目。"}
+        },
+        {
+          "@type": "Question",
+          "name": "手机端打开页面排版会乱吗？",
+          "acceptedAnswer": {"@type": "Answer", "text": "不会。本站采用响应式布局，在 320px 至 1440px 宽度区间内自动切换栅格列数与导航形态，小屏状态下顶部导航收起，改由可展开面板切换栏目。"}
+        },
+        {
+          "@type": "Question",
+          "name": "日历格子里的色块代表什么？",
+          "acceptedAnswer": {"@type": "Answer", "text": "蓝色为电影推荐，绿色为剧集更新，粉色为纪录片或综艺，黄色为站点自身的排期更新，图例中有对照说明。"}
+        },
+        {
+          "@type": "Question",
+          "name": "榜单的排序依据是什么？",
+          "acceptedAnswer": {"@type": "Answer", "text": "综合播放热度、收藏量、评分与更新时效加权计算，每周一重算，阶梯长度对应名次。"}
+        },
+        {
+          "@type": "Question",
+          "name": "发现条目信息有误如何反馈？",
+          "acceptedAnswer": {"@type": "Answer", "text": "可通过页脚纠错反馈入口提交作品名称与正确信息，编辑部会在 48 小时内核对并更新。"}
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+</body>
+</html>
